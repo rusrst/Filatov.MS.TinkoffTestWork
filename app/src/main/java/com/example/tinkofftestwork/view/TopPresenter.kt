@@ -9,23 +9,22 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
-import com.example.tinkofftestwork.data.DataClass
-import com.example.tinkofftestwork.databinding.LatestPresenterBinding
+import com.example.tinkofftestwork.databinding.TopPresenterBinding
 
-
-private const val MESSAGE_DOWNLOAD_LATEST = 0
-private const val str = "latest/"
+private const val MESSAGE_DOWNLOAD_TOP = 2
+private const val str = "top/"
 private const val start = "https://developerslife.ru/"
 private const val end = "?json=true"
-class LatestPresenter: BaseFragment(){
-    private lateinit var binding: LatestPresenterBinding
+class TopPresenter: BaseFragment() {
+    private lateinit var binding: TopPresenterBinding
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = LatestPresenterBinding.inflate(inflater, container, false)
-        initializeValue(binding.imageViewLatest, binding.textViewLatest, binding.imageButtonLatest, binding.imageButton2Latest)
+        binding = TopPresenterBinding.inflate(inflater, container, false)
+        initializeValue(binding.imageViewTop, binding.textViewTop, binding.imageButtonTop, binding.imageButton2Top)
         return binding.root
     }
 
@@ -33,7 +32,7 @@ class LatestPresenter: BaseFragment(){
         imageView: ImageView,
         descriptor: TextView,
         btUp: ImageButton,
-        btDown: ImageButton,
+        btDown: ImageButton
     ) {
         circularProgressDrawable = CircularProgressDrawable(requireContext())
         circularProgressDrawable.strokeWidth = 5f
@@ -45,14 +44,13 @@ class LatestPresenter: BaseFragment(){
         this.descriptor = descriptor
         this.btUp = btUp
         this.btDown = btDown
-        this.data = viewModel.latestData
+        data = viewModel.topData
 
-        messageDownload = MESSAGE_DOWNLOAD_LATEST
-        dataLiveData = viewModel.latestDataLiveData
+        messageDownload = MESSAGE_DOWNLOAD_TOP
+        dataLiveData = viewModel.topDataLiveData
         category = str
         startUrl = start
         endUrl = end
     }
-
 
 }

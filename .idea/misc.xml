@@ -4,7 +4,9 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/UNIX/AndroidStudioProjects/TinkoffTestWork/app/src/main/res/layout/activity_main.xml" value="0.359375" />
+        <entry key="..\:/Users/UNIX/AndroidStudioProjects/TinkoffTestWork/app/src/main/res/layout/hot_presenter.xml" value="0.18489583333333334" />
         <entry key="..\:/Users/UNIX/AndroidStudioProjects/TinkoffTestWork/app/src/main/res/layout/presenter.xml" value="0.35104166666666664" />
+        <entry key="..\:/Users/UNIX/AndroidStudioProjects/TinkoffTestWork/app/src/main/res/layout/top_presenter.xml" value="0.18489583333333334" />
       </map>
     </option>
   </component>

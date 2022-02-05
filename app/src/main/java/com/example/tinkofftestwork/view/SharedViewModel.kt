@@ -8,15 +8,25 @@ import com.example.tinkofftestwork.data.DataClass
 class SharedViewModel: ViewModel() {
     var workerThread: WorkerThread? = null
     var latestDataLiveData = MutableLiveData<List<DataClass>?>()
-    var latestStartDownload = false
     var latestData = mutableListOf<DataClass>()
-    var currentCounterLast: Int? = null
-    var currentPageCounterLast: Int? = null
-    var currentCounterHot: Int = 0
-    var currentCounterTop: Int = 0
+    val latestSimpleClass = SimpleClass()
+
+
+    var hotDataLiveData = MutableLiveData<List<DataClass>?>()
+    var hotData = mutableListOf<DataClass>()
+    val hotSimpleClass = SimpleClass()
+
+
+
+    var topDataLiveData = MutableLiveData<List<DataClass>?>()
+    var topData = mutableListOf<DataClass>()
+    val topSimpleClass = SimpleClass()
+
     override fun onCleared() {
         super.onCleared()
         workerThread?.quit()
         workerThread = null
     }
 }
+
+data class SimpleClass(var startDownload:Boolean = false, var currentCounter: Int? = null, var currentPageCounter: Int? = null)

@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/imageViewTop"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="24dp"
@@ -21,7 +21,7 @@
         />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/textViewTop"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
@@ -31,26 +31,26 @@
         android:gravity="center"
         android:text="TextView"
         android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="@+id/imageView"
-        app:layout_constraintStart_toStartOf="@+id/imageView"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+        app:layout_constraintEnd_toEndOf="@+id/imageViewTop"
+        app:layout_constraintStart_toStartOf="@+id/imageViewTop"
+        app:layout_constraintTop_toBottomOf="@+id/imageViewTop" />
 
     <ImageButton
-        android:id="@+id/imageButton"
+        android:id="@+id/imageButtonTop"
         android:layout_width="64dp"
         android:layout_height="64dp"
         android:layout_marginEnd="96dp"
-        app:layout_constraintEnd_toEndOf="@+id/textView"
-        app:layout_constraintTop_toTopOf="@+id/imageButton2"
+        app:layout_constraintEnd_toEndOf="@+id/textViewTop"
+        app:layout_constraintTop_toTopOf="@+id/imageButton2Top"
         app:srcCompat="@drawable/ic_next" />
 
     <ImageButton
-        android:id="@+id/imageButton2"
+        android:id="@+id/imageButton2Top"
         android:layout_width="64dp"
         android:layout_height="64dp"
         android:layout_marginStart="64dp"
         android:layout_marginTop="20dp"
-        app:layout_constraintStart_toStartOf="@+id/textView"
-        app:layout_constraintTop_toBottomOf="@+id/textView"
+        app:layout_constraintStart_toStartOf="@+id/textViewTop"
+        app:layout_constraintTop_toBottomOf="@+id/textViewTop"
         app:srcCompat="@drawable/ic_back" />
 </androidx.constraintlayout.widget.ConstraintLayout>

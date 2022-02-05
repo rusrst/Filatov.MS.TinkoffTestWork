@@ -3,20 +3,22 @@ package com.example.tinkofftestwork
 import com.example.tinkofftestwork.data.DataClass
 import com.example.tinkofftestwork.data.internet.InternetRepository
 import com.example.tinkofftestwork.data.json.JsonDataClass
-
 import android.os.Handler
 import android.os.HandlerThread
 import android.os.Looper
 import android.os.Message
 import androidx.lifecycle.MutableLiveData
-import com.bumptech.glide.Glide
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 
 
 private const val TAG = "BACKGROUND Thread"
 private const val MESSAGE_DOWNLOAD_LATEST = 0
-class WorkerThread(private val latestLiveData: MutableLiveData<List<DataClass>?>): HandlerThread(TAG) {
+private const val MESSAGE_DOWNLOAD_HOT = 1
+private const val MESSAGE_DOWNLOAD_TOP = 2
+class WorkerThread(private val latestLiveData: MutableLiveData<List<DataClass>?>,
+                   private val hotLiveData: MutableLiveData<List<DataClass>?>,
+                   private val topLiveData: MutableLiveData<List<DataClass>?>): HandlerThread(TAG) {
     private val internetRepository = InternetRepository.get()
     init {
         start()
@@ -28,22 +30,17 @@ class WorkerThread(private val latestLiveData: MutableLiveData<List<DataClass>?>
         return super.quit()
     }
     lateinit var mHandler: Handler
-    override fun onLooperPrepared() {
+    @Synchronized override fun onLooperPrepared() {
         mHandler = object: Handler(Looper.myLooper()!!){
-            override fun handleMessage(msg: Message) {
-                when (msg.what){
-                    MESSAGE_DOWNLOAD_LATEST -> loadInternet(msg.obj as String, msg.arg1)
-                }
-            }
+            override fun handleMessage(msg: Message) =
+                loadInternet(msg.obj as String, msg.arg1)
+
         }
     }
 
     fun returnData( url: String, id: Int){
-        when (id){
-            MESSAGE_DOWNLOAD_LATEST -> mHandler.obtainMessage(MESSAGE_DOWNLOAD_LATEST, id, 0,  url)
-                .sendToTarget()
-        }
-
+        mHandler.obtainMessage(-1, id, 0,  url)
+            .sendToTarget()
     }
 
 
@@ -66,7 +63,11 @@ class WorkerThread(private val latestLiveData: MutableLiveData<List<DataClass>?>
                 result.add(DataClass(it.description, it.gifURL, type))
             }
         }
-        latestLiveData.postValue(result)
+        when (type){
+            MESSAGE_DOWNLOAD_HOT -> hotLiveData.postValue(result)
+            MESSAGE_DOWNLOAD_LATEST -> latestLiveData.postValue(result)
+            MESSAGE_DOWNLOAD_TOP -> topLiveData.postValue(result)
+        }
     }
 }
 
