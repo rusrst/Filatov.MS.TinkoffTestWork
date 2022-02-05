@@ -4,6 +4,7 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.ImageButton
 import android.widget.ImageView
@@ -60,7 +61,13 @@ abstract class BaseFragment: Fragment() {
             setGlide(null)
         }
         if (simpleClass.currentCounter == null || simpleClass.currentCounter == 0){
+            if(simpleClass.currentCounter == null) setGlide(null)
+            else setGlide(data[simpleClass.currentCounter!!].url)
             btDown.visibility = View.INVISIBLE
+        }
+        else
+        {
+            setGlide(data[simpleClass.currentCounter!!].url)
         }
         dataLiveData.observe(viewLifecycleOwner){
             observe(it)
@@ -169,6 +176,7 @@ abstract class BaseFragment: Fragment() {
                 simpleClass.currentCounter = 0
             descriptor.text = data[simpleClass.currentCounter!!].descriptor
             setGlide(data[simpleClass.currentCounter!!].url)
+            dataLiveData.value = null
         }
     }
 }
