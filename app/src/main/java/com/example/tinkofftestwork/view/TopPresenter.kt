@@ -45,6 +45,7 @@ class TopPresenter: BaseFragment() {
         this.btUp = btUp
         this.btDown = btDown
         data = viewModel.topData
+        simpleClass = viewModel.topSimpleClass
 
         messageDownload = MESSAGE_DOWNLOAD_TOP
         dataLiveData = viewModel.topDataLiveData

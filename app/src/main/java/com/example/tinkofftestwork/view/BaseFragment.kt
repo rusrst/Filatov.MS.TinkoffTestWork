@@ -2,6 +2,7 @@ package com.example.tinkofftestwork.view
 
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageButton
@@ -12,9 +13,15 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.MutableLiveData
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import com.bumptech.glide.load.resource.gif.GifDrawable
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
+import com.example.tinkofftestwork.R
 import com.example.tinkofftestwork.WorkerThread
 import com.example.tinkofftestwork.data.DataClass
 
@@ -36,11 +43,7 @@ abstract class BaseFragment: Fragment() {
     protected lateinit var  startUrl: String
     protected lateinit var  endUrl: String
     protected lateinit var  data: MutableList<DataClass>
-
-
-    private var startDownload = false
-    private var currentPageCounter: Int? = null
-    private var currentCounter: Int? = null
+    protected lateinit var simpleClass: SimpleClass
 
     override fun onCreate(savedInstanceState: Bundle?) {
         if (viewModel.workerThread == null){
@@ -50,23 +53,23 @@ abstract class BaseFragment: Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        if (currentPageCounter == null){
-            currentPageCounter = -1
+        if (simpleClass.currentPageCounter == null){
+            simpleClass.currentPageCounter = -1
             viewModel.workerThread!!.returnData(startUrl + category + 0 + endUrl, messageDownload)
-            startDownload = true
+            simpleClass.startDownload = true
             setGlide(null)
         }
-        if (currentCounter == null || currentCounter == 0){
+        if (simpleClass.currentCounter == null || simpleClass.currentCounter == 0){
             btDown.visibility = View.INVISIBLE
         }
         dataLiveData.observe(viewLifecycleOwner){
             observe(it)
         }
         btUp.setOnClickListener{
-            listenerUp(it)
+            listenerUp()
         }
         btDown.setOnClickListener{
-            listenerDown(it)
+            listenerDown()
         }
     }
 
@@ -75,8 +78,27 @@ abstract class BaseFragment: Fragment() {
 
 
 
+    private val listener = object :RequestListener<GifDrawable>{
+        override fun onLoadFailed(
+            e: GlideException?,
+            model: Any?,
+            target: Target<GifDrawable>?,
+            isFirstResource: Boolean
+        ): Boolean {
+            descriptor.text = getString(R.string.glideError)
+            return false        }
+
+        override fun onResourceReady(
+            resource: GifDrawable?,
+            model: Any?,
+            target: Target<GifDrawable>?,
+            dataSource: DataSource?,
+            isFirstResource: Boolean
+        ): Boolean {
+            return false        }
 
 
+    }
 
     private fun setGlide(url: String?){
         Glide
@@ -84,36 +106,35 @@ abstract class BaseFragment: Fragment() {
             .asGif()
             .placeholder(circularProgressDrawable)
             .transition(DrawableTransitionOptions.withCrossFade())
-            .transform(RoundedCorners(15))
             .load(url ?: "Error")
+            .transform(RoundedCorners(15))
             .diskCacheStrategy(DiskCacheStrategy.ALL)
-            .fitCenter()
-            .error(ColorDrawable(Color.RED))
-            .fallback(ColorDrawable(Color.BLUE))
+            .listener(listener)
+            .error(R.drawable.errot_img)
             .into(imageView)
     }
 
-    private fun listenerUp (view: View){
-        if (currentCounter != null) {
-            if (currentCounter!! + 1 < data.size) {
-                currentCounter = currentCounter!! + 1
+    private fun listenerUp() {
+        if (simpleClass.currentCounter != null) {
+            if (simpleClass.currentCounter!! + 1 < data.size) {
+                simpleClass.currentCounter = simpleClass.currentCounter!! + 1
                 btDown.visibility = View.VISIBLE
-                descriptor.text = data[currentCounter!!].descriptor
-                setGlide(data[currentCounter!!].url)
+                descriptor.text = data[simpleClass.currentCounter!!].descriptor
+                setGlide(data[simpleClass.currentCounter!!].url)
             }
             else {
-                if (!startDownload) {
-                    startDownload = true
+                if (!simpleClass.startDownload) {
+                    simpleClass.startDownload = true
                     viewModel.workerThread!!.returnData(
-                        startUrl + category + (currentPageCounter!! + 1) + endUrl,
+                        startUrl + category + (simpleClass.currentPageCounter!! + 1) + endUrl,
                         messageDownload
                     )
                 }
             }
         }
         else{
-            if (!startDownload) {
-                startDownload = true
+            if (!simpleClass.startDownload) {
+                simpleClass.startDownload = true
                 viewModel.workerThread!!.returnData(
                     startUrl + category + 0 + endUrl,
                     messageDownload
@@ -122,32 +143,32 @@ abstract class BaseFragment: Fragment() {
             }
         }
     }
-    private fun listenerDown(view: View){
-        currentCounter = currentCounter!! - 1
-        if (currentCounter == 0){
+    private fun listenerDown() {
+        simpleClass.currentCounter = simpleClass.currentCounter!! - 1
+        if (simpleClass.currentCounter == 0){
             btDown.visibility = View.INVISIBLE
         }
-        descriptor.text = data[currentCounter!!].descriptor
-        setGlide(data[currentCounter!!].url)
+        descriptor.text = data[simpleClass.currentCounter!!].descriptor
+        setGlide(data[simpleClass.currentCounter!!].url)
     }
     private fun observe (list: List<DataClass>?){
-        startDownload = false
+        simpleClass.startDownload = false
         if (list != null && list.isNotEmpty()){
-            startDownload = false
-            if (currentCounter == null) currentCounter = -1
-            currentCounter =
-                currentCounter!! + 1
-            currentPageCounter = currentPageCounter!! + 1
+            simpleClass.startDownload = false
+            if (simpleClass.currentCounter == null) simpleClass.currentCounter = -1
+            simpleClass.currentCounter =
+                simpleClass.currentCounter!! + 1
+            simpleClass.currentPageCounter = simpleClass.currentPageCounter!! + 1
             list.forEach { item->
                 data.add(item)
             }
-            if(currentCounter != null){
-                descriptor.text = data[currentCounter!!].descriptor
+            if(simpleClass.currentCounter != null){
+                descriptor.text = data[simpleClass.currentCounter!!].descriptor
             }
-            if (currentCounter == null)
-                currentCounter = 0
-            descriptor.text = data[currentCounter!!].descriptor
-            setGlide(data[currentCounter!!].url)
+            if (simpleClass.currentCounter == null)
+                simpleClass.currentCounter = 0
+            descriptor.text = data[simpleClass.currentCounter!!].descriptor
+            setGlide(data[simpleClass.currentCounter!!].url)
         }
     }
 }

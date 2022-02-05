@@ -44,6 +44,7 @@ class HotPresenter: BaseFragment() {
         this.btUp = btUp
         this.btDown = btDown
         data = viewModel.hotData
+        simpleClass = viewModel.hotSimpleClass
 
         messageDownload = MESSAGE_DOWNLOAD_HOT
         dataLiveData = viewModel.hotDataLiveData

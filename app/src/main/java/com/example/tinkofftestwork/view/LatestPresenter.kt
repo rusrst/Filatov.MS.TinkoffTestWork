@@ -45,7 +45,8 @@ class LatestPresenter: BaseFragment(){
         this.descriptor = descriptor
         this.btUp = btUp
         this.btDown = btDown
-        this.data = viewModel.latestData
+        data = viewModel.latestData
+        simpleClass = viewModel.latestSimpleClass
 
         messageDownload = MESSAGE_DOWNLOAD_LATEST
         dataLiveData = viewModel.latestDataLiveData

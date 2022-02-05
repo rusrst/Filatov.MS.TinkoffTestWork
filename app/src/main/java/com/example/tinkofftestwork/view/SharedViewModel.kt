@@ -29,4 +29,5 @@ class SharedViewModel: ViewModel() {
     }
 }
 
-data class SimpleClass(var startDownload:Boolean = false, var currentCounter: Int? = null, var currentPageCounter: Int? = null)
+data class SimpleClass
+    (var startDownload:Boolean = false, var currentCounter: Int? = null, var currentPageCounter: Int? = null)
