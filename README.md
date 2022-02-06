@@ -8,6 +8,10 @@ test work for tinkoff fintech scool.
 
 Задание можно посмотреть [здесь](https://github.com/rusrst/Filatov.MS.TinkoffTestWork/blob/main/task/android-lr-f33f350b-e465-46a5-9a83-dbe88ea76d1d.pdf)  
 
+В приложении реализована навигация по темам. 
+
+Есть простой unit test и простая анимация появления/пропадания кнопки.  
+
 При подготовке были использованы:  
 
 Viewpager2
