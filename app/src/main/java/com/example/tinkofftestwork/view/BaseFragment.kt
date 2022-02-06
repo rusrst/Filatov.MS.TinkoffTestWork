@@ -63,7 +63,12 @@ abstract class BaseFragment: Fragment() {
         if (simpleClass.currentCounter == null || simpleClass.currentCounter == 0){
             if(simpleClass.currentCounter == null) setGlide(null)
             else setGlide(data[simpleClass.currentCounter!!].url)
-            btDown.visibility = View.INVISIBLE
+            if (btDown.visibility == View.VISIBLE) {
+                btDown.isEnabled = false
+                btDown.animate().alpha(0.0f).setDuration(500L).withEndAction {
+                    btDown.visibility = View.INVISIBLE
+                }.start()
+            }
         }
         else
         {
@@ -125,7 +130,13 @@ abstract class BaseFragment: Fragment() {
         if (simpleClass.currentCounter != null) {
             if (simpleClass.currentCounter!! + 1 < data.size) {
                 simpleClass.currentCounter = simpleClass.currentCounter!! + 1
-                btDown.visibility = View.VISIBLE
+
+                if (btDown.visibility == View.INVISIBLE) {
+                    btDown.isEnabled = true
+                    btDown.alpha = 0.0f
+                    btDown.visibility = View.VISIBLE
+                    btDown.animate().alpha(1.0f).setDuration(500L).start()
+                }
                 descriptor.text = data[simpleClass.currentCounter!!].descriptor
                 setGlide(data[simpleClass.currentCounter!!].url)
             }
@@ -153,7 +164,12 @@ abstract class BaseFragment: Fragment() {
     private fun listenerDown() {
         simpleClass.currentCounter = simpleClass.currentCounter!! - 1
         if (simpleClass.currentCounter == 0){
-            btDown.visibility = View.INVISIBLE
+            if (btDown.visibility == View.VISIBLE) {
+                btDown.isEnabled = false
+                btDown.animate().alpha(0.0f).setDuration(500L).withEndAction {
+                    btDown.visibility = View.INVISIBLE
+                }.start()
+            }
         }
         descriptor.text = data[simpleClass.currentCounter!!].descriptor
         setGlide(data[simpleClass.currentCounter!!].url)

@@ -42,15 +42,18 @@
         android:layout_marginEnd="96dp"
         app:layout_constraintEnd_toEndOf="@+id/textViewTop"
         app:layout_constraintTop_toTopOf="@+id/imageButton2Top"
-        app:srcCompat="@drawable/ic_next" />
+        app:srcCompat="@drawable/ic_next"
+        android:background="@drawable/circle_button"/>
 
     <ImageButton
         android:id="@+id/imageButton2Top"
         android:layout_width="64dp"
         android:layout_height="64dp"
-        android:layout_marginStart="64dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginStart="68dp"
+        android:layout_marginBottom="110dp"
+        android:background="@drawable/circle_button"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@+id/textViewTop"
-        app:layout_constraintTop_toBottomOf="@+id/textViewTop"
         app:srcCompat="@drawable/ic_back" />
 </androidx.constraintlayout.widget.ConstraintLayout>
