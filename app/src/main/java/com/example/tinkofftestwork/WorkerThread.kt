@@ -8,6 +8,7 @@ import android.os.HandlerThread
 import android.os.Looper
 import android.os.Message
 import androidx.lifecycle.MutableLiveData
+import com.example.tinkofftestwork.data.json.JsonParser
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 
@@ -50,19 +51,9 @@ class WorkerThread(private val latestLiveData: MutableLiveData<List<DataClass>?>
         } catch (e: Exception){
             null
         }
-        val temp: JsonDataClass?= try{
-            Json.decodeFromString<JsonDataClass>(data ?: "")
-        }
-        catch (e:Exception){
-            null
-        }
-        var result: List<DataClass>? = null
-        if (temp != null){
-            result = mutableListOf()
-            temp.result.forEach {
-                result.add(DataClass(it.description, it.gifURL, type))
-            }
-        }
+
+        var result: List<DataClass>? = JsonParser.getList(data, type)
+
         when (type){
             MESSAGE_DOWNLOAD_HOT -> hotLiveData.postValue(result)
             MESSAGE_DOWNLOAD_LATEST -> latestLiveData.postValue(result)
